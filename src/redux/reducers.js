@@ -6,12 +6,25 @@ import {
     SET_CONVERTED_AMOUNT,
 } from './actions';
   
-const initialState = {
-    currencyOptions: [],
-    toCurrency: null,
-    exchangeRate: null,
-    amount: 1,
-    convertedAmount: null,
+const loadStateFromLocalStorage = () => {
+  try {
+    const serializedState = localStorage.getItem('currencyConverterState');
+    if (serializedState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    console.error('Error loading state from localStorage:', err);
+    return undefined;
+  }
+};
+
+export const initialState = loadStateFromLocalStorage() || {
+  currencyOptions: [],
+  toCurrency: null,
+  exchangeRate: null,
+  amount: 1,
+  convertedAmount: null,
 };
   
 const reducer = (state = initialState, action) => {

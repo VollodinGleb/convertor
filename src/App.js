@@ -4,7 +4,7 @@ import { setCurrencyOptions, setToCurrency, setExchangeRate, setAmount, setConve
 import CurrencyRow from './CurrencyRow';
 import './App.css';
 
-const BASE_URL = 'https://v6.exchangerate-api.com/v6/0a4dd460b29ea49944742494/latest/USD';
+const BASE_URL = 'https://v6.exchangerate-api.com/v6/0a4dd460b29ea49944742494/latest';
 
 function App() {
   const dispatch = useDispatch();
@@ -25,9 +25,10 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
+    const for_convert = 'https://v6.exchangerate-api.com/v6/0a4dd460b29ea49944742494/latest/USD'
     console.log('Currency Options:', currencyOptions);
     if (toCurrency != null && currencyOptions.length > 0) {
-      fetch(`${BASE_URL}?base=USD&symbols=${toCurrency}`)
+      fetch(`${for_convert}?base=USD&symbols=${toCurrency}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.conversion_rates && data.conversion_rates[toCurrency]) {
