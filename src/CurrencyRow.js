@@ -1,29 +1,41 @@
 // CurrencyRow.js
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setToCurrency, setAmount } from './store/currencyActions';
+import { connect } from 'react-redux';
+import {
+  setToCurrency,
+  setAmount,
+} from './redux/actions';
 
-export default function CurrencyRow() {
-  const dispatch = useDispatch();
-  const { toCurrency, amount, exchangeRate, currencyOptions } = useSelector((state) => state);
-
-  console.log('CurrencyOptions:', currencyOptions);
+function CurrencyRow(props) {
+  const {
+    currencyOptions,
+    selectedCurrency,
+    onChangeCurrency,
+    amount,
+    onChangeAmount,
+  } = props;
 
   return (
     <div>
-      <input
-        type="number"
-        className="input"
-        value={amount}
-        onChange={(e) => dispatch(setAmount(e.target.value))}
-      />
-      <select value={toCurrency} onChange={(e) => dispatch(setToCurrency(e.target.value))}>
+      <input type="number" className="input" value={amount} onChange={(e) => onChangeAmount(e.target.value)}/>
+      <select value={selectedCurrency} onChange={(e) => onChangeCurrency(e.target.value)}>
         {currencyOptions.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
+          <option key={option} value={option}>{option}</option>
         ))}
       </select>
     </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  currencyOptions: state.currencyOptions,
+  selectedCurrency: state.toCurrency,
+  amount: state.amount,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onChangeCurrency: (value) => dispatch(setToCurrency(value)),
+  onChangeAmount: (value) => dispatch(setAmount(value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CurrencyRow);
